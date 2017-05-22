@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\api">
+      <UniqueIdentifier>{c4030fba-f3b3-4573-8f6d-0830f432dd50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\server">
+      <UniqueIdentifier>{17dbfa6d-a015-4253-b901-978d122107b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\util">
+      <UniqueIdentifier>{690e7821-aa06-4610-b27c-de1fa93a4aa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\server">
+      <UniqueIdentifier>{d24a6520-513d-4974-a0ab-06c01c3e6e40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\api">
+      <UniqueIdentifier>{f8f491de-9493-4c40-925a-5e76fb6cd9f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\util">
+      <UniqueIdentifier>{666a5180-d34c-4b32-b95f-e79425c0188b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="api\blood_ocr.h">
+      <Filter>头文件\api</Filter>
+    </ClInclude>
+    <ClInclude Include="util\arg_parser.h">
+      <Filter>头文件\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\base64.h">
+      <Filter>头文件\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\common.h">
+      <Filter>头文件\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\my_log.h">
+      <Filter>头文件\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\uri_codec.h">
+      <Filter>头文件\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\util.h">
+      <Filter>头文件\util</Filter>
+    </ClInclude>
+    <ClInclude Include="server\connection.hpp">
+      <Filter>头文件\server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\connection_manager.hpp">
+      <Filter>头文件\server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\header.hpp">
+      <Filter>头文件\server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\mime_types.hpp">
+      <Filter>头文件\server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\reply.hpp">
+      <Filter>头文件\server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\request.hpp">
+      <Filter>头文件\server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\request_handler.hpp">
+      <Filter>头文件\server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\request_parser.hpp">
+      <Filter>头文件\server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\server.hpp">
+      <Filter>头文件\server</Filter>
+    </ClInclude>
+    <ClInclude Include="err.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="api\asr.h">
+      <Filter>头文件\api</Filter>
+    </ClInclude>
+    <ClInclude Include="master.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="api\blood_ocr.cpp">
+      <Filter>源文件\api</Filter>
+    </ClCompile>
+    <ClCompile Include="util\arg_parser.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\base64.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\common.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\my_log.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\uri_codec.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\util.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="server\connection.cpp">
+      <Filter>源文件\server</Filter>
+    </ClCompile>
+    <ClCompile Include="server\connection_manager.cpp">
+      <Filter>源文件\server</Filter>
+    </ClCompile>
+    <ClCompile Include="server\mime_types.cpp">
+      <Filter>源文件\server</Filter>
+    </ClCompile>
+    <ClCompile Include="server\reply.cpp">
+      <Filter>源文件\server</Filter>
+    </ClCompile>
+    <ClCompile Include="server\request_handler.cpp">
+      <Filter>源文件\server</Filter>
+    </ClCompile>
+    <ClCompile Include="server\request_parser.cpp">
+      <Filter>源文件\server</Filter>
+    </ClCompile>
+    <ClCompile Include="server\server.cpp">
+      <Filter>源文件\server</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="api\asr.cpp">
+      <Filter>源文件\api</Filter>
+    </ClCompile>
+    <ClCompile Include="master.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
