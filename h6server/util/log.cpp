@@ -32,7 +32,6 @@ void MyLog::init(string dir){
 	}
 	/*  打开对应的日志文件 */
 	_file.open(_file_name.c_str(), ios::app | ios::out);
-
 	if (!_file){
 		cerr << "Log file open failed!" << endl;
 		exit(0);

@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 	}
 
 	string port = "12345";
-	string log_dir = "d:/logs";
+	string log_dir = "logs";
 
 	if (parser.hasArg("i"))
 	{
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 
 	/*  初始化LOG系统 */
 	MyLog::init(log_dir);
-
+	_INFO("init log.\n");
 	/*  启动server服务 */
 	try
 	{

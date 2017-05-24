@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-import subprocess
+"""
+ author：hxuanz
+ data：207-05-22
+ desc：生成一个批处理文件。
+       该批处理文件目的：  自动化训练 --》 生成语言包文件，并自动移动到tessdata目录下
+"""
 import os
 import sys
 
@@ -47,19 +52,15 @@ def build_commond(lang):
     commonds.append('del *.box')
 
     commonds.append('move %s.traineddata %%TESSDATA_PREFIX%%/tessdata/' % lang)
-    #commonds.append('move %s.traineddata result/' % lang)
 
     commond = '\n'.join(commonds)
     print(commond)
     return commond
 
 if __name__ == '__main__':
-    lang = 'xhd_value'  #
+    lang = 'xhd_value'  # 需要生成的
     if len(sys.argv) == 2:
         lang = sys.argv[1]
 
     commond = build_commond(lang)
     open('%s_run.bat' % (lang), 'w').write(commond)
-
-    #retcode = subprocess.call(commond, shell=True)
-    # subprocess.Popen("gedit abc.txt", shell=True)
