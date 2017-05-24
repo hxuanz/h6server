@@ -1,7 +1,7 @@
-// main.cpp : 定义控制台应用程序的入口点。
+// 应用程序的入口点。
 
 #include "server/server.hpp"
-#include "util/my_log.h"
+#include "util/log.h"
 #include "util/arg_parser.h"
 #include "master.h"
 
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 	/*  启动server服务 */
 	try
 	{
-		Master mater;
+		Master mater; /* 任务分发 */
 		http::server::server s("0.0.0.0", port, mater);
 
 		{
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 			_INFO(tmp);
 		}
 
-		s.run();  //阻塞
+		s.run();  //阻塞等待
 	}
 	catch (std::exception& e)
 	{

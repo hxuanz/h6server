@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include "connection_manager.hpp"
 #include "request_handler.hpp"
-#include "../util/my_log.h"
 
 namespace http {
 	namespace server {
@@ -28,8 +27,8 @@ namespace http {
 			socket_.close();
 		}
 
-		/* 接受的是http post 请求，
-		数据分为两部分：header 和 data。 两部分用 \t\n\t\n 隔开
+		/*  接受的如果是http post 请求
+			数据分为两部分：header 和 data。 两部分用 \t\n\t\n 隔开
 		*/
 		void connection::do_read()
 		{
@@ -71,7 +70,6 @@ namespace http {
 						{
 							request_handler_.handle_request(request_, reply_);  // 处理请求， 结果写入reply_对象中
 							/* 发送给客户端 */
-							_INFO(reply_.content);
 							do_write();
 							request_.data = ""; 
 							request_.is_in_headers = true;

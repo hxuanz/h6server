@@ -4,7 +4,7 @@
 #include "request.hpp"
 
 #include "json/json.h"
-#include "../util/uri_codec.h"
+#include "../util/url_util.h"
 #include "../master.h"
 namespace http {
 	namespace server {

@@ -30,19 +30,7 @@ namespace COMMON
 		idxs = new_idxs;
 	}
 
-	bool floatEqual(float d1, float d2, float accuracy)
-	{
-		return abs(d1 - d2) < accuracy;
-	}
-	/* 是否是同一个字母， 不区分大小写*/
-	bool isCharEqual(unsigned char a, unsigned char b)
-	{
-		if (isalpha(a) && isalpha(b))
-		{
-			return toupper(a) == toupper(b);
-		}
-		return false;
-	}
+
 
 	/*  TODO: 代价可以考虑重新定义
 	如果是C和G之间的替换，则更小*/
@@ -60,7 +48,7 @@ namespace COMMON
 			for (int i = 1; i <= m; i++)
 			{
 				int tmp = dp[i];
-				if (isCharEqual(word1[i - 1], word2[j - 1]))  // 忽略大小写
+				if (charEqual(word1[i - 1], word2[j - 1]))  // 忽略大小写
 					dp[i] = pre;
 				else
 				{
@@ -72,7 +60,7 @@ namespace COMMON
 		return dp.back();
 	}
 
-	/* 去除空格 */
+	
 	string stripAllSpace(string str)
 	{
 		vector<char> tmp;
@@ -84,10 +72,25 @@ namespace COMMON
 		return string(tmp.begin(), tmp.end());
 	}
 	
-	bool isFloat(string myString) {
-		std::istringstream iss(myString);
+
+	bool floatEqual(float d1, float d2, float accuracy)
+	{
+		return abs(d1 - d2) < accuracy;
+	}
+	
+	bool charEqual(unsigned char a, unsigned char b)
+	{
+		if (isalpha(a) && isalpha(b)) /*不区分大小写*/
+		{
+			return toupper(a) == toupper(b);
+		}
+		return false;
+	}
+	bool isFloat(string str) 
+	{
+		istringstream iss(str);
 		float f;
-		iss >> noskipws >> f; // noskipws considers leading whitespace invalid
-		return iss.eof() && !iss.fail();// Check the entire string was consumed and if either failbit or badbit is set
+		iss >> noskipws >> f; 
+		return iss.eof() && !iss.fail();
 	}
 }

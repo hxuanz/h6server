@@ -1,32 +1,15 @@
 #include "master.h"
-
-#include <iostream>
 #include <unordered_map>
-#include <boost/algorithm/string.hpp>
-
-#include "util/uri_codec.h"
-#include "util/my_log.h"
-#include "util/base64.h"
 
 #include "err.h"
+#include "util/url_util.h"
+#include "util/log.h"
+#include "util/base64.h"
 
 #include "api/blood_ocr.h"
 #include "api/asr.h"
 using namespace std;
 
-/* 解析post的data字段，键值对。  eg：  ....=...&...=...&......=... */
-void parse_params(string data, unordered_map<string, string>& params)
-{
-	vector<string> strs;
-	boost::split(strs, data, boost::is_any_of("&"));
-	for (auto str : strs)
-	{
-		vector<string> key_val;
-		boost::split(key_val, str, boost::is_any_of("="));
-		/* 参数解析之后再URL解码 */
-		params[url_decode(key_val.front())] = url_decode(key_val.back());
-	}
-}
 
 Master::Master()
 {
@@ -65,7 +48,7 @@ void Master::svc(string request_path, string req_data, Json::Value& result_root)
 			goto BREAK;
 		}
 
-		/* 调用 ocr api*/
+		/* 调用 ocr api。 单例，只在第一次调用的时候有初始化*/
 		Blood_OCR& bloodocr = Blood_OCR::Instance();
 		ret = bloodocr.loadDictionary(params.at("scaleData"));
 		if (ret != 0)

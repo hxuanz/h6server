@@ -1,5 +1,5 @@
 #pragma once
-
+/* 任务分发 */
 #include "json/json.h"
 class Master
 {

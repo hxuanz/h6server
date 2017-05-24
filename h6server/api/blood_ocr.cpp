@@ -1,11 +1,12 @@
 #include "blood_ocr.h"
 #include <time.h> 
-#include "../err.h"
-#include "../util/my_log.h"
-#include "../util/util.h"
-#include "../util/common.h"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
+
+#include "../err.h"
+#include "../util/log.h"
+#include "../util/ocr_util.h"
+#include "../util/common.h"
 
 using namespace std;
 using namespace cv;
@@ -49,7 +50,7 @@ int Blood_OCR::loadDictionary(string dictionary_string)
 }
 
 
-/* 找到横线 →  定位四个角 → 透视变换 */
+/* 透视变换 */
 int Blood_OCR::perspectiveTransformation(const Mat& src_image, Mat& dst_image)
 {
 	Size src_image_size = src_image.size();
@@ -57,26 +58,22 @@ int Blood_OCR::perspectiveTransformation(const Mat& src_image, Mat& dst_image)
 	/* 找横线*/
 	vector<Vec2f> lines;
 	{
-		if (detectLines(src_image, lines) != 0)
+		if (OCR_UTIL::detectLines(src_image, lines) != 0)
 		{
 			_ERROR("直线数量" + to_string(lines.size()));
 			return H6OCRERROR::perspective_detectLines;
 		}
-		//{
-		//	Mat tmp_image(src_image);
-		//	drawLines(tmp_image, lines);
-		//	imshow("横线识别结果", tmp_image);
-		//}
 		/* 找到需要的直线*/
-		findHorizontaLines_MaxInterval(lines);  //这里假定：间距最大的两条直线之间的内容就是待识别区域
+		OCR_UTIL::findHorizontaLines_MaxInterval(lines);  //这里假定：间距最大的两条直线之间的内容就是待识别区域
 	}
 
-	{	/* 定位四个角 */
+	/* 定位四个角 */
+	{	
 		vector<Point2f> corners = {
-			getLeftEndpointOfLine(lines.front()),
-			getRightEndpointOfLine(lines.front(), src_image_size.width),
-			getLeftEndpointOfLine(lines.back()),
-			getRightEndpointOfLine(lines.back(), src_image_size.width)
+			OCR_UTIL::getLeftEndpointOfLine(lines.front()),
+			OCR_UTIL::getRightEndpointOfLine(lines.front(), src_image_size.width),
+			OCR_UTIL::getLeftEndpointOfLine(lines.back()),
+			OCR_UTIL::getRightEndpointOfLine(lines.back(), src_image_size.width)
 		};
 
 		Size2f dst_size = { (float)src_image_size.width, lines.back()[0] - lines.front()[0] };
@@ -99,7 +96,7 @@ int Blood_OCR::findLeftAndRightEdge(const Mat& src_image, Mat& dst_image)
 		Canny(src_image, canny_image, 50, 200, 3);
 		int threshold = 5;  // 阈值:5  
 		cv::HoughLines(canny_image, lines, 1, CV_PI / 180, threshold, 0, 0);
-		findLines_Vertical(lines);
+		OCR_UTIL::findLines_Vertical(lines);
 	}
 
 	if (lines.empty())
@@ -126,7 +123,7 @@ int Blood_OCR::correctKey(vector<string> &keys)
 			++valid_count;
 			continue;
 		}
-		/* 根据编辑距离最小原则，纠正*/
+		/* 根据编辑距离最小原则 */
 		int minDis = 100;
 		string target;
 		for (auto name_pair : dictionary_)
@@ -136,10 +133,10 @@ int Blood_OCR::correctKey(vector<string> &keys)
 			if (dis < minDis)
 			{
 				minDis = dis;
-				target = name;  //
+				target = name; 
 			}
 		}
-		if (minDis <= key.size() / 2)
+		if (minDis <= key.size() / 2) /* 编辑距离 小于 该字符串一半的长度*/
 		{
 			++valid_count;
 			key = target;  //correct
@@ -148,7 +145,7 @@ int Blood_OCR::correctKey(vector<string> &keys)
 	return valid_count;
 }
 
-/* 根据是否是float判断*/
+/* 根据是否是float判断。 这里假定 value 几乎都是数字*/
 int Blood_OCR::correctValue(vector<string> &values)
 {
 	int valid_count = 0;
@@ -175,25 +172,21 @@ int Blood_OCR::cutAndOcr(const Mat& image)
 	vector<Rect> rects;
 	{
 		Rect image_rect = { 0, 0, image_size.width, image_size.height };
-		cut_Vertical(canny_image, image_rect, rects);
+		OCR_UTIL::cut_Vertical(canny_image, image_rect, rects);
 		if (rects.empty())
 		{
 			_ERROR("竖向切割的结果为空" );
 			return H6OCRERROR::cutAndOcr_cut_Vertical;
 		}
-		//Mat tmp;
-		//cv::cvtColor(image, tmp, CV_GRAY2BGR);
-		//drawRectangles(tmp, rects);
-		//imshow("竖向切割区域识别", tmp);
 	}
 
-		
 	vector<string> keys, values;
 
 	tess_ocr_key_.SetImage(image.data, image.cols, image.rows, 1, image.step);
 	tess_ocr_value_.SetImage(image.data, image.cols, image.rows, 1, image.step);
 
-	int key_count_flag = 0; // 还没找到对应value列的key的列数
+	/* 假定 一列key对应一列value， 且key在value左边 */
+	int key_count_flag = 0; // 标识：还没找到对应value列的key
 	int tmp_idx = 0;
 	vector<string> tmp_keys;
 	_INFO("横向切割...");
@@ -202,17 +195,17 @@ int Blood_OCR::cutAndOcr(const Mat& image)
 		++tmp_idx;
 		/* 横着切割， 得到最终的识别小区域 */
 		vector<Rect> areas;
-		if (cut_Horizontal(canny_image, rect, areas) != 0)
+		if (OCR_UTIL::cut_Horizontal(canny_image, rect, areas) != 0)
 		{
 			continue; //
 		}
 		/* debug*/
-		//{
+		{
 		//	Mat tmp_image;
 		//	cv::cvtColor(image, tmp_image, CV_GRAY2BGR);
 		//	drawRectangles(tmp_image, areas);
 		//	//imshow("识别区域" + std::to_string(tmp_idx), tmp_image);
-		//}
+		}
 
 
 		/*
@@ -223,7 +216,7 @@ int Blood_OCR::cutAndOcr(const Mat& image)
 		int valid_count = 0;
 		if (key_count_flag == 0)
 		{
-			batchOCR(tess_ocr_key_, image, areas, result);
+			OCR_UTIL::batchOCR(tess_ocr_key_, image, areas, result);
 			valid_count = correctKey(result);
 			if (valid_count > result.size() / 3)  // 匹配度超过1/3 -> 可认为是key
 			{
@@ -233,7 +226,7 @@ int Blood_OCR::cutAndOcr(const Mat& image)
 		}
 		else
 		{
-			batchOCR(tess_ocr_value_, image, areas, result);
+			OCR_UTIL::batchOCR(tess_ocr_value_, image, areas, result);
 			valid_count = correctValue(result);
 			if (valid_count > result.size() / 2)  // 匹配度超过一半 -> 可认为是value
 			{
@@ -282,9 +275,11 @@ int Blood_OCR::cutAndOcr(const Mat& image)
 可识别对象要求： 至少有两条横线； 然后按列分隔，key和value的列一一对应
 基本识别思路：
 	识别横线，取横线间距最大的两条作为识别区域
-	根据两条横线的四个角，投射变换得到规整的矩形区域；
+	根据两条横线的四个角，透射变换得到规整的矩形区域；
 	按列切割；
-	针对每一列，尝试识别；如果识别率达到一定阈值确定其实key或者value。
+	针对每一列，尝试识别；如果识别率达到一定阈值确定是key或者value。
+		与字典尝试匹配确定是否是key
+		是否都是数字确定是否是value
 */
 int Blood_OCR::recognise(const vector<unsigned char>& image_buffer)
 {
@@ -314,6 +309,7 @@ int Blood_OCR::recognise(const vector<unsigned char>& image_buffer)
 
 	return ret;
 }
+
 
 void Blood_OCR::retrieve(Json::Value& result)
 {

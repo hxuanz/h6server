@@ -1,9 +1,11 @@
 #include "asr.h"
-extern "C"{
+extern "C"
+{
 	#include <libavutil/opt.h>
 	#include <libavutil/channel_layout.h>
 	#include <libavutil/samplefmt.h>
 	#include <libswresample/swresample.h>
+	#include <libavformat/avformat.h>
 }
 
 #include <stdlib.h>
@@ -16,8 +18,7 @@ extern "C"{
 #include "msp_cmn.h"
 #include "msp_errors.h"
 #include <fstream>
-
-#include "../util/my_log.h"
+#include "../util/log.h"
 using namespace std;
 
 typedef unsigned char uchar;
@@ -224,6 +225,8 @@ ASR::~ASR()
 int ASR::convertFromat(unsigned char *src_data, unsigned char *dst_data)
 {
 	// TODO  通过 http://ffmpeg.org/doxygen/trunk/index.html 讲音频转为 16k采样率的wav文件
+	
+	return 1;
 }
 
 

@@ -1,4 +1,4 @@
-#include "my_log.h"
+#include "log.h"
 #include <ctime>
 
 using namespace std;
