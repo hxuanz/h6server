@@ -52,7 +52,6 @@ namespace OCR_UTIL
 	}
 
 
-	/* 横线中找到纵坐标跟值target最接近的两条直线*/
 	void findHorizontaLinesNearTarget(vector<Vec2f>& lines, float target)
 	{
 		//lines 已经是排好序的
@@ -224,18 +223,6 @@ namespace OCR_UTIL
 		return{ range.left, rect.y, range.right - range.left, rect.height };
 	}
 
-	void stripRight(string &str)
-	{
-		int n = str.size(), i;
-		for (i = n - 1; i > -1; --i)
-		{
-			if (str[i] != '\n')
-			{
-				str.resize(i + 1);
-				break;
-			}
-		}
-	}
 
 
 	void batchOCR(tesseract::TessBaseAPI& tess_ocr, const Mat& image, const vector<Rect>& areas, vector<string> &result)
@@ -245,7 +232,7 @@ namespace OCR_UTIL
 		{
 			tess_ocr.SetRectangle(rect.x, rect.y, rect.width, rect.height);
 			string text = tess_ocr.GetUTF8Text();
-			stripRight(text);
+			COMMON::stripRightLF(text);
 			result.push_back(text);
 		}
 	}

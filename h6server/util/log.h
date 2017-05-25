@@ -11,9 +11,9 @@
 
 class MyLog{
 public:
-	static void write(std::string msg, std::string type);
 	static void init(std::string dir);
-
+	static void write(std::string msg, std::string type);
+	
 private:
 	static std::string _file_name;
 	static std::ofstream _file;
@@ -22,4 +22,5 @@ private:
 
 #define _INFO(msg) MyLog::write(msg, " [INFO  ] ")
 #define _ERROR(msg) MyLog::write(msg, " [ERROR] ")
+
 #endif //__MYLOG_H__

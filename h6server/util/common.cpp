@@ -30,8 +30,6 @@ namespace COMMON
 		idxs = new_idxs;
 	}
 
-
-
 	/*  TODO: 代价可以考虑重新定义
 	如果是C和G之间的替换，则更小*/
 	int minEditDistance(string word1, string word2) {
@@ -60,7 +58,6 @@ namespace COMMON
 		return dp.back();
 	}
 
-	
 	string stripAllSpace(string str)
 	{
 		vector<char> tmp;
@@ -72,12 +69,23 @@ namespace COMMON
 		return string(tmp.begin(), tmp.end());
 	}
 	
+	void stripRightLF(string &str)
+	{
+		int n = str.size(), i;
+		for (i = n - 1; i > -1; --i)
+		{
+			if (str[i] != '\n')
+			{
+				str.resize(i + 1);
+				break;
+			}
+		}
+	}
 
 	bool floatEqual(float d1, float d2, float accuracy)
 	{
 		return abs(d1 - d2) < accuracy;
 	}
-	
 	bool charEqual(unsigned char a, unsigned char b)
 	{
 		if (isalpha(a) && isalpha(b)) /*不区分大小写*/

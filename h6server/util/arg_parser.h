@@ -12,15 +12,13 @@ public:
 	ArgParser();
 	ArgParser::~ArgParser();
 
-	void parse(int argc, char* argv[]);
-	string getArg(string key);
-	bool hasArg(string key);
-	bool hasArg(string key1, string key2){ return hasArg(key1) || hasArg(key2); }
+	void parse(int argc, char* argv[]); /* 解析 命令行参数 */
 
+	inline string getArg(string key){ return hasArg(key) ? _args[key] : ""; }
+	inline bool hasArg(string key){ return _args.count(key) == 1; }
+	inline bool hasArg(string key1, string key2){ return hasArg(key1) || hasArg(key2); }
 
-	string getPositionalArgByIndex(int i) {
-		return _free_options[i];
-	}
+	inline string getPositionalArgByIndex(int i) { return _free_options[i]; }
 
 private:
 

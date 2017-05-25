@@ -33,17 +33,3 @@ void ArgParser::parse(int argc, char* argv[])
 		}
 	}
 }
-
-string ArgParser::getArg(string key)
-{
-	if (hasArg(key))
-	{
-		return _args[key];
-	}
-	return "";
-}
-
-bool ArgParser::hasArg(string key)
-{
-	return _args.count(key) == 1;
-}
